@@ -1,0 +1,1029 @@
+### 응답 전문 (0210)
+```json
+{
+  "common": {
+    "systemInfo": {
+      "messageId": "MSG20241225143025001",
+      "messageType": "0210",
+      "messageSubType": "03",
+      "version": "2.1.0",
+      "timestamp": "20241225143025456",
+      "timeZone": "UTC+09:00",
+      "locale": "ko_KR",
+      "encoding": "UTF-8"
+    },
+    "transactionInfo": {
+      "transactionId": "TXN20241225000001",
+      "originalTransactionId": "TXN20241225000001",
+      "parentTransactionId": "",
+      "correlationId": "CORR20241225001",
+      "batchId": "",
+      "sequenceNumber": 1,
+      "totalCount": 1,
+      "retryCount": 0,
+      "priority": "NORMAL",
+      "urgentFlag": "N"
+    },
+    "institutionInfo": {
+      "sourceInstitution": {
+        "code": "001",
+        "name": "KB국민은행",
+        "type": "BANK",
+        "branchCode": "1001",
+        "branchName": "강남지점",
+        "deptCode": "D001",
+        "deptName": "개인금융부"
+      },
+      "targetInstitution": {
+        "code": "",
+        "name": "",
+        "type": "",
+        "branchCode": "",
+        "branchName": ""
+      }
+    },
+    "channelInfo": {
+      "channelType": "ATM",
+      "channelCode": "CH001",
+      "terminalId": "ATM001",
+      "terminalType": "KIOSK",
+      "terminalLocation": "강남구 테헤란로 123",
+      "terminalVersion": "V2.1.0",
+      "networkType": "PRIVATE",
+      "ipAddress": "192.168.1.100",
+      "macAddress": "00:1B:44:11:3A:B7"
+    },
+    "userInfo": {
+      "userId": "TELLER01",
+      "userName": "김영희",
+      "userType": "TELLER",
+      "roleCode": "ROLE_TELLER",
+      "branchCode": "1001",
+      "deptCode": "D001",
+      "loginTime": "20241225090000",
+      "sessionId": "SES20241225001",
+      "sessionTimeout": 1800,
+      "authLevel": "L2"
+    },
+    "businessInfo": {
+      "serviceCode": "ACC_INQUIRY",
+      "serviceName": "계좌조회",
+      "businessDate": "20241225",
+      "businessTime": "143025",
+      "workingDay": "Y",
+      "holidayType": "",
+      "cutoffFlag": "N"
+    }
+  },
+  "body": {
+    "responseCode": "0000",
+    "responseMessage": "정상처리",
+    "processingInfo": {
+      "processedTime": "20241225143025123",
+      "processingDuration": 2333,
+      "serverInfo": {
+        "serverId": "SVR001",
+        "serverName": "CORE-SERVER-01",
+        "loadBalancerId": "LB001"
+      }
+    },
+    "accountInfo": {
+      "accountNumber": "110-123-456789",
+      "accountName": "홍길동",
+      "accountType": "01",
+      "accountStatus": "01",
+      "openDate": "20200115",
+      "productCode": "P001",
+      "productName": "자유적금",
+      "branchCode": "1001",
+      "branchName": "강남지점"
+    },
+    "balanceInfo": {
+      "availableBalance": 1500000,
+      "ledgerBalance": 1500000,
+      "holdAmount": 0,
+      "currency": "KRW",
+      "lastUpdateTime": "20241225143020"
+    },
+    "transactionHistory": [
+      {
+        "transactionDate": "20241225",
+        "transactionTime": "140000",
+        # 은행 JSON 전문 설계서
+
+## 1. 전문 구조 개요
+
+### 기본 메시지 구조
+```json
+{
+  "common": {
+    "systemInfo": {
+      "messageId": "MSG20241225143022001",
+      "messageType": "0200",
+      "messageSubType": "01",
+      "version": "2.1.0",
+      "timestamp": "20241225143022123",
+      "timeZone": "UTC+09:00",
+      "locale": "ko_KR",
+      "encoding": "UTF-8"
+    },
+    "transactionInfo": {
+      "transactionId": "TXN20241225000001",
+      "originalTransactionId": "",
+      "parentTransactionId": "",
+      "correlationId": "CORR20241225001",
+      "batchId": "",
+      "sequenceNumber": 1,
+      "totalCount": 1,
+      "retryCount": 0,
+      "priority": "NORMAL",
+      "urgentFlag": "N"
+    },
+    "institutionInfo": {
+      "sourceInstitution": {
+        "code": "001",
+        "name": "KB국민은행",
+        "type": "BANK",
+        "branchCode": "1001",
+        "branchName": "강남지점",
+        "deptCode": "D001",
+        "deptName": "개인금융부"
+      },
+      "targetInstitution": {
+        "code": "002",
+        "name": "신한은행",
+        "type": "BANK",
+        "branchCode": "2001",
+        "branchName": "역삼지점"
+      }
+    },
+    "channelInfo": {
+      "channelType": "ATM",
+      "channelCode": "CH001",
+      "terminalId": "ATM001",
+      "terminalType": "KIOSK",
+      "terminalLocation": "강남구 테헤란로 123",
+      "terminalVersion": "V2.1.0",
+      "networkType": "PRIVATE",
+      "ipAddress": "192.168.1.100",
+      "macAddress": "00:1B:44:11:3A:B7"
+    },
+    "userInfo": {
+      "userId": "TELLER01",
+      "userName": "김영희",
+      "userType": "TELLER",
+      "roleCode": "ROLE_TELLER",
+      "branchCode": "1001",
+      "deptCode": "D001",
+      "loginTime": "20241225090000",
+      "sessionId": "SES20241225001",
+      "sessionTimeout": 1800,
+      "authLevel": "L2"
+    },
+    "businessInfo": {
+      "serviceCode": "ACC_INQUIRY",
+      "serviceName": "계좌조회",
+      "businessDate": "20241225",
+      "businessTime": "143022",
+      "workingDay": "Y",
+      "holidayType": "",
+      "cutoffFlag": "N"
+    }
+  },
+  "body": {
+    // 업무별 데이터
+  },
+  "security": {
+    "encryption": {
+      "algorithm": "AES256",
+      "keyId": "KEY20241225",
+      "keyVersion": "V1.0",
+      "encryptedFields": ["body.customerInfo.idNumber"],
+      "encryptionFlag": "Y"
+    },
+    "authentication": {
+      "authMethod": "CERTIFICATE",
+      "certificateId": "CERT001",
+      "signature": "BASE64_ENCODED_SIGNATURE",
+      "signatureAlgorithm": "RSA-SHA256",
+      "hashValue": "SHA256_HASH"
+    },
+    "integrity": {
+      "checksum": "A1B2C3D4E5F6",
+      "checksumAlgorithm": "CRC32",
+      "messageDigest": "MD5_DIGEST"
+    }
+  },
+  "monitoring": {
+    "traceId": "TRACE20241225001",
+    "spanId": "SPAN001",
+    "logLevel": "INFO",
+    "performanceInfo": {
+      "requestTime": "20241225143022123",
+      "expectedResponseTime": "20241225143025123",
+      "timeoutSeconds": 30
+    }
+  }
+}
+```
+
+## 2. 공통정보(Common) 상세 정의
+
+### 2.1 시스템 정보 (systemInfo)
+| 필드명 | 타입 | 길이 | 필수 | 설명 | 예시값 |
+|--------|------|------|------|------|-------|
+| messageId | String | 20 | Y | 메시지 고유ID | MSG20241225143022001 |
+| messageType | String | 4 | Y | 전문종별코드 | 0200 |
+| messageSubType | String | 2 | N | 전문 세부유형 | 01 |
+| version | String | 10 | Y | 전문버전 | 2.1.0 |
+| timestamp | String | 17 | Y | 전송일시(밀리초포함) | 20241225143022123 |
+| timeZone | String | 10 | Y | 시간대 | UTC+09:00 |
+| locale | String | 10 | Y | 로케일 | ko_KR |
+| encoding | String | 10 | Y | 인코딩 | UTF-8 |
+
+### 2.2 거래 정보 (transactionInfo)
+| 필드명 | 타입 | 길이 | 필수 | 설명 | 예시값 |
+|--------|------|------|------|------|-------|
+| transactionId | String | 20 | Y | 거래고유번호 | TXN20241225000001 |
+| originalTransactionId | String | 20 | N | 원거래번호(취소시) | TXN20241224000001 |
+| parentTransactionId | String | 20 | N | 상위거래번호 | TXN20241225000000 |
+| correlationId | String | 20 | N | 연관거래ID | CORR20241225001 |
+| batchId | String | 20 | N | 배치처리ID | BATCH20241225001 |
+| sequenceNumber | Integer | - | Y | 순번 | 1 |
+| totalCount | Integer | - | Y | 전체건수 | 1 |
+| retryCount | Integer | - | Y | 재시도횟수 | 0 |
+| priority | String | 10 | Y | 우선순위 | NORMAL, HIGH, LOW |
+| urgentFlag | String | 1 | Y | 긴급처리여부 | Y, N |
+
+### 2.3 기관 정보 (institutionInfo)
+#### 송신기관 (sourceInstitution)
+| 필드명 | 타입 | 길이 | 필수 | 설명 | 예시값 |
+|--------|------|------|------|------|-------|
+| code | String | 3 | Y | 기관코드 | 001 |
+| name | String | 50 | Y | 기관명 | KB국민은행 |
+| type | String | 10 | Y | 기관유형 | BANK, CARD, FINTECH |
+| branchCode | String | 4 | Y | 지점코드 | 1001 |
+| branchName | String | 50 | Y | 지점명 | 강남지점 |
+| deptCode | String | 4 | N | 부서코드 | D001 |
+| deptName | String | 50 | N | 부서명 | 개인금융부 |
+
+#### 수신기관 (targetInstitution)
+| 필드명 | 타입 | 길이 | 필수 | 설명 | 예시값 |
+|--------|------|------|------|------|-------|
+| code | String | 3 | N | 타겟기관코드 | 002 |
+| name | String | 50 | N | 타겟기관명 | 신한은행 |
+| type | String | 10 | N | 타겟기관유형 | BANK |
+| branchCode | String | 4 | N | 타겟지점코드 | 2001 |
+| branchName | String | 50 | N | 타겟지점명 | 역삼지점 |
+
+### 2.4 채널 정보 (channelInfo)
+| 필드명 | 타입 | 길이 | 필수 | 설명 | 예시값 |
+|--------|------|------|------|------|-------|
+| channelType | String | 10 | Y | 채널유형 | ATM, MOBILE, WEB, POS |
+| channelCode | String | 10 | Y | 채널코드 | CH001 |
+| terminalId | String | 20 | Y | 단말기ID | ATM001 |
+| terminalType | String | 10 | Y | 단말기유형 | KIOSK, POS, MOBILE |
+| terminalLocation | String | 100 | N | 단말기위치 | 강남구 테헤란로 123 |
+| terminalVersion | String | 10 | N | 단말기버전 | V2.1.0 |
+| networkType | String | 10 | Y | 네트워크유형 | PRIVATE, PUBLIC |
+| ipAddress | String | 15 | N | IP주소 | 192.168.1.100 |
+| macAddress | String | 17 | N | MAC주소 | 00:1B:44:11:3A:B7 |
+
+### 2.5 사용자 정보 (userInfo)
+| 필드명 | 타입 | 길이 | 필수 | 설명 | 예시값 |
+|--------|------|------|------|------|-------|
+| userId | String | 20 | Y | 사용자ID | TELLER01 |
+| userName | String | 50 | Y | 사용자명 | 김영희 |
+| userType | String | 10 | Y | 사용자유형 | TELLER, CUSTOMER, ADMIN |
+| roleCode | String | 20 | Y | 역할코드 | ROLE_TELLER |
+| branchCode | String | 4 | Y | 소속지점코드 | 1001 |
+| deptCode | String | 4 | Y | 소속부서코드 | D001 |
+| loginTime | String | 14 | Y | 로그인시간 | 20241225090000 |
+| sessionId | String | 20 | Y | 세션ID | SES20241225001 |
+| sessionTimeout | Integer | - | Y | 세션타임아웃(초) | 1800 |
+| authLevel | String | 5 | Y | 인증레벨 | L1, L2, L3 |
+
+### 2.6 업무 정보 (businessInfo)
+| 필드명 | 타입 | 길이 | 필수 | 설명 | 예시값 |
+|--------|------|------|------|------|-------|
+| serviceCode | String | 20 | Y | 서비스코드 | ACC_INQUIRY |
+| serviceName | String | 50 | Y | 서비스명 | 계좌조회 |
+| businessDate | String | 8 | Y | 영업일자 | 20241225 |
+| businessTime | String | 6 | Y | 영업시간 | 143022 |
+| workingDay | String | 1 | Y | 영업일여부 | Y, N |
+| holidayType | String | 2 | N | 휴일유형 | 01=일요일, 02=공휴일 |
+| cutoffFlag | String | 1 | Y | 마감처리여부 | Y, N |
+
+### 2.7 보안 정보 (security)
+#### 암호화 (encryption)
+| 필드명 | 타입 | 길이 | 필수 | 설명 | 예시값 |
+|--------|------|------|------|------|-------|
+| algorithm | String | 10 | Y | 암호화알고리즘 | AES256 |
+| keyId | String | 20 | Y | 키ID | KEY20241225 |
+| keyVersion | String | 10 | Y | 키버전 | V1.0 |
+| encryptedFields | Array | - | Y | 암호화필드목록 | ["body.customerInfo.idNumber"] |
+| encryptionFlag | String | 1 | Y | 암호화여부 | Y, N |
+
+#### 인증 (authentication)
+| 필드명 | 타입 | 길이 | 필수 | 설명 | 예시값 |
+|--------|------|------|------|------|-------|
+| authMethod | String | 20 | Y | 인증방식 | CERTIFICATE, TOKEN, PIN |
+| certificateId | String | 20 | N | 인증서ID | CERT001 |
+| signature | String | - | N | 전자서명 | BASE64_ENCODED |
+| signatureAlgorithm | String | 20 | N | 서명알고리즘 | RSA-SHA256 |
+| hashValue | String | - | Y | 해시값 | SHA256_HASH |
+
+#### 무결성 (integrity)
+| 필드명 | 타입 | 길이 | 필수 | 설명 | 예시값 |
+|--------|------|------|------|------|-------|
+| checksum | String | 20 | Y | 체크섬 | A1B2C3D4E5F6 |
+| checksumAlgorithm | String | 10 | Y | 체크섬알고리즘 | CRC32 |
+| messageDigest | String | - | N | 메시지다이제스트 | MD5_DIGEST |
+
+### 2.8 모니터링 정보 (monitoring)
+| 필드명 | 타입 | 길이 | 필수 | 설명 | 예시값 |
+|--------|------|------|------|------|-------|
+| traceId | String | 20 | Y | 추적ID | TRACE20241225001 |
+| spanId | String | 20 | Y | 스팬ID | SPAN001 |
+| logLevel | String | 10 | Y | 로그레벨 | DEBUG, INFO, WARN, ERROR |
+
+#### 성능정보 (performanceInfo)
+| 필드명 | 타입 | 길이 | 필수 | 설명 | 예시값 |
+|--------|------|------|------|------|-------|
+| requestTime | String | 17 | Y | 요청시간 | 20241225143022123 |
+| expectedResponseTime | String | 17 | Y | 예상응답시간 | 20241225143025123 |
+| timeoutSeconds | Integer | - | Y | 타임아웃(초) | 30 |
+
+### 메시지 타입 코드 및 세부유형
+```
+기본 메시지 타입:
+0200: 거래요청
+0210: 거래응답  
+0220: 거래통지
+0221: 거래통지응답
+0400: 취소요청
+0410: 취소응답
+0800: 관리전문
+0810: 관리전문응답
+
+세부유형 (messageSubType):
+01: 일반거래
+02: 배치거래  
+03: 조회거래
+04: 승인거래
+05: 정정거래
+06: 취소거래
+07: 통지거래
+08: 확인거래
+09: 시스템거래
+10: 테스트거래
+```
+
+### 채널 유형별 특성
+```
+ATM:
+- 24시간 운영
+- 현금 입출금 가능
+- 카드 인증 필수
+- 오프라인 처리 가능
+
+MOBILE:
+- 개인 인증 필수
+- 푸시 알림 지원
+- 생체 인증 가능
+- 위치 기반 서비스
+
+WEB:
+- 브라우저 기반
+- 세션 관리 중요
+- SSL/TLS 필수
+- 다중 탭 지원
+
+POS:
+- 가맹점 전용
+- 카드 결제 전용
+- 영수증 출력
+- 통신 이중화
+```
+
+### 인증 레벨 정의
+```
+L1 (기본): 
+- ID/PW 인증
+- 기본 조회 기능
+- 소액 거래 (10만원 이하)
+
+L2 (중급):
+- 2차 인증 (OTP, SMS)
+- 일반 이체 기능  
+- 중간 거래 (100만원 이하)
+
+L3 (고급):
+- 공인인증서/생체인증
+- 고액 거래 무제한
+- 관리자 기능 접근
+```
+
+## 3. 계좌 조회 전문
+
+### 요청 전문 (0200)
+```json
+{
+  "common": {
+    "systemInfo": {
+      "messageId": "MSG20241225143022001",
+      "messageType": "0200",
+      "messageSubType": "03",
+      "version": "2.1.0",
+      "timestamp": "20241225143022123",
+      "timeZone": "UTC+09:00",
+      "locale": "ko_KR",
+      "encoding": "UTF-8"
+    },
+    "transactionInfo": {
+      "transactionId": "TXN20241225000001",
+      "originalTransactionId": "",
+      "parentTransactionId": "",
+      "correlationId": "CORR20241225001",
+      "batchId": "",
+      "sequenceNumber": 1,
+      "totalCount": 1,
+      "retryCount": 0,
+      "priority": "NORMAL",
+      "urgentFlag": "N"
+    },
+    "institutionInfo": {
+      "sourceInstitution": {
+        "code": "001",
+        "name": "KB국민은행",
+        "type": "BANK",
+        "branchCode": "1001",
+        "branchName": "강남지점",
+        "deptCode": "D001",
+        "deptName": "개인금융부"
+      },
+      "targetInstitution": {
+        "code": "",
+        "name": "",
+        "type": "",
+        "branchCode": "",
+        "branchName": ""
+      }
+    },
+    "channelInfo": {
+      "channelType": "ATM",
+      "channelCode": "CH001",
+      "terminalId": "ATM001",
+      "terminalType": "KIOSK",
+      "terminalLocation": "강남구 테헤란로 123",
+      "terminalVersion": "V2.1.0",
+      "networkType": "PRIVATE",
+      "ipAddress": "192.168.1.100",
+      "macAddress": "00:1B:44:11:3A:B7"
+    },
+    "userInfo": {
+      "userId": "TELLER01",
+      "userName": "김영희",
+      "userType": "TELLER",
+      "roleCode": "ROLE_TELLER",
+      "branchCode": "1001",
+      "deptCode": "D001",
+      "loginTime": "20241225090000",
+      "sessionId": "SES20241225001",
+      "sessionTimeout": 1800,
+      "authLevel": "L2"
+    },
+    "businessInfo": {
+      "serviceCode": "ACC_INQUIRY",
+      "serviceName": "계좌조회",
+      "businessDate": "20241225",
+      "businessTime": "143022",
+      "workingDay": "Y",
+      "holidayType": "",
+      "cutoffFlag": "N"
+    }
+  },
+  "body": {
+    "serviceCode": "ACC_INQUIRY",
+    "accountNumber": "110-123-456789",
+    "customerInfo": {
+      "customerId": "C123456789",
+      "customerName": "홍길동",
+      "customerType": "01",
+      "idType": "01",
+      "idNumber": "9001011234567"
+    },
+    "inquiryType": "01",
+    "inquiryStartDate": "20241201",
+    "inquiryEndDate": "20241225",
+    "maxRecords": 100
+  },
+  "security": {
+    "encryption": {
+      "algorithm": "AES256",
+      "keyId": "KEY20241225",
+      "keyVersion": "V1.0",
+      "encryptedFields": ["body.customerInfo.idNumber"],
+      "encryptionFlag": "Y"
+    },
+    "authentication": {
+      "authMethod": "CERTIFICATE",
+      "certificateId": "CERT001",
+      "signature": "BASE64_ENCODED_SIGNATURE",
+      "signatureAlgorithm": "RSA-SHA256",
+      "hashValue": "SHA256_HASH_VALUE"
+    },
+    "integrity": {
+      "checksum": "A1B2C3D4E5F6",
+      "checksumAlgorithm": "CRC32",
+      "messageDigest": "MD5_DIGEST_VALUE"
+    }
+  },
+  "monitoring": {
+    "traceId": "TRACE20241225001",
+    "spanId": "SPAN001",
+    "logLevel": "INFO",
+    "performanceInfo": {
+      "requestTime": "20241225143022123",
+      "expectedResponseTime": "20241225143025123",
+      "timeoutSeconds": 30
+    }
+  }
+}
+```
+
+### 응답 전문 (0210)
+```json
+{
+  "header": {
+    "messageType": "0210",
+    "version": "1.0",
+    "timestamp": "20241225143025",
+    "transactionId": "TXN20241225000001",
+    "institutionCode": "001",
+    "branchCode": "1001",
+    "terminalId": "ATM001",
+    "userId": "TELLER01"
+  },
+  "body": {
+    "responseCode": "0000",
+    "responseMessage": "정상처리",
+    "accountInfo": {
+      "accountNumber": "110-123-456789",
+      "accountName": "홍길동",
+      "accountType": "01",
+      "accountStatus": "01",
+      "openDate": "20200115",
+      "productCode": "P001",
+      "productName": "자유적금",
+      "branchCode": "1001",
+      "branchName": "강남지점"
+    },
+    "balanceInfo": {
+      "availableBalance": 1500000,
+      "ledgerBalance": 1500000,
+      "holdAmount": 0,
+      "currency": "KRW",
+      "lastUpdateTime": "20241225143020"
+    },
+    "transactionHistory": [
+      {
+        "transactionDate": "20241225",
+        "transactionTime": "140000",
+        "transactionType": "01",
+        "transactionAmount": 100000,
+        "balanceAfter": 1500000,
+        "description": "ATM입금",
+        "transactionBranch": "1001",
+        "counterpartyAccount": "",
+        "counterpartyName": "",
+        "memo": "현금입금"
+      }
+    ],
+    "totalRecords": 1
+  },
+  "security": {
+    "checksum": "F6E5D4C3B2A1",
+    "encryptionFlag": "Y",
+    "signature": "RESPONSE_SIGNATURE"
+  }
+}
+```
+
+## 4. 계좌 이체 전문
+
+### 이체 요청 전문 (0200)
+```json
+{
+  "header": {
+    "messageType": "0200",
+    "version": "1.0",
+    "timestamp": "20241225143030",
+    "transactionId": "TXN20241225000002",
+    "institutionCode": "001",
+    "branchCode": "1001",
+    "terminalId": "ATM001",
+    "userId": "TELLER01"
+  },
+  "body": {
+    "serviceCode": "TRANSFER",
+    "fromAccount": {
+      "accountNumber": "110-123-456789",
+      "accountName": "홍길동",
+      "institutionCode": "001"
+    },
+    "toAccount": {
+      "accountNumber": "220-987-654321",
+      "accountName": "김철수",
+      "institutionCode": "002",
+      "bankName": "국민은행"
+    },
+    "transferInfo": {
+      "amount": 500000,
+      "currency": "KRW",
+      "transferType": "01",
+      "transferPurpose": "생활비",
+      "memo": "월 생활비 송금",
+      "feeType": "01",
+      "urgentFlag": "N"
+    },
+    "customerInfo": {
+      "customerId": "C123456789",
+      "customerName": "홍길동",
+      "phoneNumber": "010-1234-5678",
+      "authMethod": "01",
+      "authValue": "123456"
+    }
+  },
+  "security": {
+    "checksum": "1A2B3C4D5E6F",
+    "encryptionFlag": "Y"
+  }
+}
+```
+
+### 이체 응답 전문 (0210)
+```json
+{
+  "header": {
+    "messageType": "0210",
+    "version": "1.0",
+    "timestamp": "20241225143035",
+    "transactionId": "TXN20241225000002",
+    "institutionCode": "001",
+    "branchCode": "1001",
+    "terminalId": "ATM001",
+    "userId": "TELLER01"
+  },
+  "body": {
+    "responseCode": "0000",
+    "responseMessage": "정상처리",
+    "transferResult": {
+      "transferId": "TR20241225000001",
+      "transferStatus": "01",
+      "processedTime": "20241225143034",
+      "transferAmount": 500000,
+      "transferFee": 500,
+      "totalAmount": 500500
+    },
+    "fromAccountInfo": {
+      "accountNumber": "110-123-456789",
+      "balanceBefore": 1500000,
+      "balanceAfter": 999500
+    },
+    "toAccountInfo": {
+      "accountNumber": "220-987-654321",
+      "accountName": "김철수",
+      "institutionCode": "002",
+      "bankName": "국민은행"
+    },
+    "receiptInfo": {
+      "receiptNumber": "RCP20241225000001",
+      "printFlag": "Y"
+    }
+  },
+  "security": {
+    "checksum": "6F5E4D3C2B1A",
+    "encryptionFlag": "Y",
+    "signature": "TRANSFER_SIGNATURE"
+  }
+}
+```
+
+## 5. 대출 조회 전문
+
+### 대출 조회 요청 (0200)
+```json
+{
+  "header": {
+    "messageType": "0200",
+    "version": "1.0",
+    "timestamp": "20241225143040",
+    "transactionId": "TXN20241225000003",
+    "institutionCode": "001",
+    "branchCode": "1001",
+    "userId": "TELLER01"
+  },
+  "body": {
+    "serviceCode": "LOAN_INQUIRY",
+    "customerInfo": {
+      "customerId": "C123456789",
+      "customerName": "홍길동",
+      "idType": "01",
+      "idNumber": "9001011234567",
+      "phoneNumber": "010-1234-5678"
+    },
+    "loanAccountNumber": "310-123-456789",
+    "inquiryType": "01"
+  },
+  "security": {
+    "checksum": "2B3C4D5E6F7A",
+    "encryptionFlag": "Y"
+  }
+}
+```
+
+### 대출 조회 응답 (0210)
+```json
+{
+  "header": {
+    "messageType": "0210",
+    "version": "1.0",
+    "timestamp": "20241225143045",
+    "transactionId": "TXN20241225000003",
+    "institutionCode": "001",
+    "branchCode": "1001",
+    "userId": "TELLER01"
+  },
+  "body": {
+    "responseCode": "0000",
+    "responseMessage": "정상처리",
+    "loanInfo": {
+      "loanAccountNumber": "310-123-456789",
+      "loanProductCode": "L001",
+      "loanProductName": "주택담보대출",
+      "loanAmount": 200000000,
+      "loanBalance": 150000000,
+      "interestRate": 3.5,
+      "loanStartDate": "20220315",
+      "loanEndDate": "20420315",
+      "repaymentMethod": "01",
+      "repaymentDay": 15,
+      "loanStatus": "01"
+    },
+    "repaymentInfo": {
+      "nextRepaymentDate": "20250115",
+      "monthlyRepaymentAmount": 800000,
+      "principalAmount": 500000,
+      "interestAmount": 300000,
+      "remainingMonths": 204,
+      "totalInterest": 45000000
+    },
+    "collateralInfo": [
+      {
+        "collateralType": "01",
+        "collateralValue": 300000000,
+        "collateralAddress": "서울시 강남구 테헤란로 123",
+        "evaluationDate": "20220301"
+      }
+    ]
+  },
+  "security": {
+    "checksum": "7A6F5E4D3C2B",
+    "encryptionFlag": "Y"
+  }
+}
+```
+
+## 6. 카드 거래 승인 전문
+
+### 카드 승인 요청 (0200)
+```json
+{
+  "header": {
+    "messageType": "0200",
+    "version": "1.0",
+    "timestamp": "20241225143050",
+    "transactionId": "TXN20241225000004",
+    "institutionCode": "001",
+    "terminalId": "POS001",
+    "merchantId": "MER001"
+  },
+  "body": {
+    "serviceCode": "CARD_AUTH",
+    "cardInfo": {
+      "cardNumber": "1234-****-****-5678",
+      "cardType": "01",
+      "expiryDate": "2612",
+      "trackData": "ENCRYPTED_TRACK_DATA"
+    },
+    "transactionInfo": {
+      "amount": 50000,
+      "currency": "KRW",
+      "transactionType": "00",
+      "installmentMonth": 0,
+      "merchantCategoryCode": "5411"
+    },
+    "merchantInfo": {
+      "merchantId": "MER001",
+      "merchantName": "편의점ABC",
+      "merchantAddress": "서울시 강남구",
+      "terminalId": "POS001"
+    },
+    "additionalInfo": {
+      "posEntryMode": "02",
+      "pinVerified": "Y",
+      "cvvVerified": "Y"
+    }
+  },
+  "security": {
+    "checksum": "3C4D5E6F7A8B",
+    "encryptionFlag": "Y"
+  }
+}
+```
+
+### 카드 승인 응답 (0210)
+```json
+{
+  "header": {
+    "messageType": "0210",
+    "version": "1.0",
+    "timestamp": "20241225143055",
+    "transactionId": "TXN20241225000004",
+    "institutionCode": "001",
+    "terminalId": "POS001",
+    "merchantId": "MER001"
+  },
+  "body": {
+    "responseCode": "00",
+    "responseMessage": "승인",
+    "authorizationInfo": {
+      "authorizationCode": "123456",
+      "authorizationNumber": "AUTH20241225001",
+      "referenceNumber": "REF20241225001",
+      "approvalTime": "20241225143054"
+    },
+    "cardInfo": {
+      "cardNumber": "1234-****-****-5678",
+      "cardType": "01",
+      "issuerCode": "001",
+      "issuerName": "KB국민카드"
+    },
+    "transactionInfo": {
+      "approvedAmount": 50000,
+      "availableBalance": 1950000,
+      "installmentMonth": 0
+    },
+    "receiptInfo": {
+      "receiptData": "거래승인 영수증 데이터",
+      "printFlag": "Y"
+    }
+  },
+  "security": {
+    "checksum": "8B7A6F5E4D3C",
+    "encryptionFlag": "Y"
+  }
+}
+```
+
+## 7. 에러 코드 정의
+
+### 응답 코드 체계
+| 코드 | 분류 | 설명 |
+|------|------|------|
+| 0000 | 성공 | 정상처리 |
+| 1001 | 시스템 | 시스템 오류 |
+| 1002 | 시스템 | 통신 오류 |
+| 1003 | 시스템 | 타임아웃 |
+| 2001 | 인증 | 인증 실패 |
+| 2002 | 인증 | 권한 없음 |
+| 2003 | 인증 | 세션 만료 |
+| 3001 | 계좌 | 계좌 없음 |
+| 3002 | 계좌 | 잔액 부족 |
+| 3003 | 계좌 | 계좌 정지 |
+| 4001 | 카드 | 카드 없음 |
+| 4002 | 카드 | 카드 정지 |
+| 4003 | 카드 | 한도 초과 |
+| 5001 | 거래 | 거래 한도 초과 |
+| 5002 | 거래 | 중복 거래 |
+| 5003 | 거래 | 거래 불가 시간 |
+
+### 에러 응답 전문
+```json
+{
+  "header": {
+    "messageType": "0210",
+    "version": "1.0",
+    "timestamp": "20241225143060",
+    "transactionId": "TXN20241225000005",
+    "institutionCode": "001",
+    "branchCode": "1001"
+  },
+  "body": {
+    "responseCode": "3002",
+    "responseMessage": "잔액이 부족합니다",
+    "errorDetails": {
+      "errorCode": "INSUFFICIENT_BALANCE",
+      "errorDescription": "요청 금액이 가용 잔액을 초과합니다",
+      "availableBalance": 100000,
+      "requestedAmount": 150000,
+      "additionalInfo": "최대 출금 가능 금액: 100,000원"
+    }
+  },
+  "security": {
+    "checksum": "9C8B7A6F5E4D",
+    "encryptionFlag": "N"
+  }
+}
+```
+
+## 8. 보안 및 암호화
+
+### 암호화 필드
+```json
+{
+  "encryptedFields": [
+    "body.customerInfo.idNumber",
+    "body.cardInfo.cardNumber",
+    "body.cardInfo.trackData",
+    "body.customerInfo.phoneNumber"
+  ],
+  "encryptionMethod": "AES256",
+  "keyVersion": "20241225",
+  "hashAlgorithm": "SHA256"
+}
+```
+
+### 전자서명
+```json
+{
+  "signature": {
+    "algorithm": "RSA-SHA256",
+    "keyId": "SIGN_KEY_001",
+    "signatureValue": "BASE64_ENCODED_SIGNATURE",
+    "certificateChain": "BASE64_ENCODED_CERT_CHAIN"
+  }
+}
+```
+
+## 9. 메시지 큐 연동
+
+### 비동기 처리 전문
+```json
+{
+  "header": {
+    "messageType": "0220",
+    "version": "1.0",
+    "timestamp": "20241225143065",
+    "transactionId": "TXN20241225000006",
+    "institutionCode": "001",
+    "correlationId": "CORR20241225001"
+  },
+  "body": {
+    "serviceCode": "BATCH_TRANSFER",
+    "batchId": "BATCH20241225001",
+    "requestCount": 1000,
+    "totalAmount": 50000000,
+    "processingStatus": "PROCESSING",
+    "callbackUrl": "https://api.bank.com/callback/batch"
+  }
+}
+```
+
+## 10. 로그 및 모니터링
+
+### 로그 전문
+```json
+{
+  "logInfo": {
+    "logLevel": "INFO",
+    "logTime": "20241225143070",
+    "transactionId": "TXN20241225000007",
+    "serviceCode": "ACC_INQUIRY",
+    "processingTime": 1500,
+    "responseCode": "0000",
+    "sourceIP": "192.168.1.100",
+    "userId": "TELLER01",
+    "additionalData": {
+      "accountNumber": "110-***-***789",
+      "requestSize": 1024,
+      "responseSize": 2048
+    }
+  }
+}
+```
+
+## 11. 테스트 시나리오
+
+### 정상 케이스
+- 계좌 조회: 유효한 계좌번호로 조회
+- 계좌 이체: 충분한 잔액으로 이체
+- 카드 승인: 유효한 카드로 승인 요청
+
+### 오류 케이스
+- 계좌 조회: 존재하지 않는 계좌번호
+- 계좌 이체: 잔액 부족 상황
+- 카드 승인: 정지된 카드로 승인 요청
+
+이 설계서는 실제 금융권에서 사용하는 전문 구조를 JSON 형태로 현대화한 것입니다. 보안, 성능, 확장성을 모두 고려하여 설계되었습니다.
